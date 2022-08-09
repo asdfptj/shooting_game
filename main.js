@@ -30,6 +30,35 @@ function loadImage() {
     gameOverImage.src = "images/gameover.gif"
 }
 
+let keysDown = {};
+function setupkeyboardListener() {
+    document.addEventListener("keydown", function (event) {
+        keysDown[event.keyCode] = true;
+        console.log("키다운객체에 들어간 값은?", keysDown);
+
+    });
+    document.addEventListener("keyup", function (event) {
+        delete keysDown[event.keyCode]
+        console.log("버튼 클릭 후", keysDown);
+    });
+}
+
+function update() {
+    if (39 in keysDown) {
+        spaceshipX += 5 //우주선의 속도
+    }  // right
+    if (37 in keysDown) {
+        spaceshipX -= 5
+    }  //left
+
+    if (spaceshipX <= 0) {
+        spaceshipX = 0
+    }
+    if (spaceshipX >= canvas.width - 64) {
+        spaceshipX = canvas.width - 64;
+    }
+    // 우주선의 좌표
+}
 
 function render() {
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -37,9 +66,11 @@ function render() {
 }
 
 function main() {
-    render()
+    update(); //좌표값을 업데이트하고
+    render()  //그려주고
     requestAnimationFrame(main)
 }
 
 loadImage();
+setupkeyboardListener();
 main();
